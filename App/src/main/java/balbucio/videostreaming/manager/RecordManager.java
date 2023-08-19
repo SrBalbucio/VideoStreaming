@@ -46,5 +46,12 @@ public class RecordManager {
         streamingManager.registerNewStreaming(fps, name);
         recordTask = new RecordTask(this);
         responsiveScheduler.repeatTask(recordTask, 0, (1000/fps)); // divide um segundo pela quantidade de FPS
+        this.live = true;
+    }
+
+    public void stopRecord(){
+        responsiveScheduler.cancelTask(recordTask);
+        streamingManager.unregisterStream();
+        this.live = false;
     }
 }

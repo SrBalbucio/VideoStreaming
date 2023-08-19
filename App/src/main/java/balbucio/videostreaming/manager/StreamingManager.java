@@ -25,12 +25,24 @@ public class StreamingManager {
         streamingID = (String) client.request("REGISTER_STREAM", payload);
     }
 
+    public void unregisterStream(){
+        JSONObject payload = new JSONObject();
+        payload.put("id", streamingID);
+        client.request("UNREGISTER_STREAM", payload);
+    }
+
     public void sendImageFrame(String image){
         JSONObject payload = new JSONObject();
         payload.put("id", streamingID);
         payload.put("data", image);
         payload.put("time", System.currentTimeMillis());
         client.request("STREAM_FRAME", payload);
+    }
+
+    public String getLastFrame(String id){
+        JSONObject payload = new JSONObject();
+        payload.put("id", id);
+        return (String) client.request("GET_FRAME", payload);
     }
 
     public JSONObject getStreams(){

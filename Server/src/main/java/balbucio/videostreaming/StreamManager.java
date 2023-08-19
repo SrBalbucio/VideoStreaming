@@ -19,6 +19,14 @@ public class StreamManager {
         return stream;
     }
 
+    public static void unregisterStream(JSONObject payload){
+        String id = payload.getString("id");
+        Stream stream  = streams.stream().filter(s -> s.getId().toString().equalsIgnoreCase(id)).findFirst().orElse(null);
+        if(stream != null){
+            streams.remove(stream);
+        }
+    }
+
     public static void addFrame(JSONObject payload){
         String id = payload.getString("id");
         Stream stream = streams.stream().filter(s -> s.getId().toString().equalsIgnoreCase(id)).findFirst().orElse(null);

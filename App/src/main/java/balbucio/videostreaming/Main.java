@@ -10,6 +10,7 @@ import balbucio.videostreaming.utils.VideoUtils;
 import de.milchreis.uibooster.UiBooster;
 import de.milchreis.uibooster.model.Form;
 import de.milchreis.uibooster.model.ListElement;
+import de.milchreis.uibooster.model.UiBoosterOptions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -29,7 +30,11 @@ public class Main {
     private WatchManager watchManager;
 
     public Main() throws AWTException {
-        this.ui = new UiBooster();
+        this.ui = new UiBooster(UiBoosterOptions.Theme.DARK_THEME, "logo.png");
+        ui.createTrayMenu("VideoStreaming", "logo.png")
+                .withPopupMenu()
+                .addMenu("Stop Stream", this::stopRecord)
+                .addMenu("Exit", () -> { System.exit(0);} );
         this.responsiveScheduler = new ResponsiveScheduler();
         Form f = ui.createForm("Video Streaming")
                 .addLabel("Conecte-se a um servidor para poder transmitir e assistir lives!")
@@ -67,7 +72,11 @@ public class Main {
                 .addSelection("Qualidade:", Arrays.asList("480p", "720p", "1080p", "Nativo"))
                 .addSlider("Quant. de frames por segundo: (hz)", 15, 240, 60, 30, 30)
                 .addCheckbox("Forçar o client a ver mais frames").show();
-        String q = f.getByIndex(3).asString();
-        recordManager.startStream(f.getByIndex(1).asString(), f.getByIndex(2).asInt(), VideoQuality.valueOf(q.contains("p") ? "V_"+q : q));
+        String q = f.getByIndex(2).asString();
+        recordManager.startStream(f.getByIndex(1).asString(), f.getByIndex(3).asInt(), VideoQuality.valueOf(q.contains("p") ? "V_"+q : q));
+    }
+
+    public void stopRecord(){
+        recordManager.stopRecord();
     }
 }

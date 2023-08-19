@@ -2,10 +2,7 @@ package balbucio.videostreaming.model;
 
 import lombok.Data;
 import org.json.JSONObject;
-
-import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Data
 public class Stream {

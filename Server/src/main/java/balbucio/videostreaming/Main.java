@@ -41,6 +41,8 @@ public class Main implements IDelegate {
             return StreamManager.getLastFrame(payload);
         } else if(s.equalsIgnoreCase("GET_STREAMS")){
             return StreamManager.getStreams();
+        } else if(s.equalsIgnoreCase("UNREGISTER_STREAM")){
+            StreamManager.unregisterStream(payload);
         }
         return null;
     }
