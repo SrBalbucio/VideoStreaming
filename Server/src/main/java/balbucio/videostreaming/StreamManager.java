@@ -8,13 +8,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class StreamManager {
 
-    private static List<Stream> streams = new ArrayList<>();
+    public static CopyOnWriteArrayList<Stream> streams = new CopyOnWriteArrayList<>();
 
     public static Stream registerNewStream(JSONObject payload){
         Stream stream = new Stream(payload);
+        System.out.println("Nova stream registrada com o ID "+stream.getId().toString()+"!");
         streams.add(stream);
         return stream;
     }
@@ -50,6 +52,7 @@ public class StreamManager {
         streams.forEach(s -> {
             JSONObject info = new JSONObject();
             info.put("id", s.getId().toString());
+            info.put("fps", s.getFps());
             info.put("name", s.getName());
             info.put("lastframe", s.getLastFrame());
             array.put(info);

@@ -26,7 +26,7 @@ public class WatchManager {
         this.id = id;
         this.fps = fps;
         this.watchTask = new WatchTask(this);
-        responsiveScheduler.repeatTask(watchTask, 0, (1000/fps));
+        responsiveScheduler.repeatTask(watchTask, 0, (1000/(fps*2)));
 
     }
 }

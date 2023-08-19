@@ -1,5 +1,7 @@
 package balbucio.videostreaming;
 
+import balbucio.responsivescheduler.ResponsiveScheduler;
+import balbucio.videostreaming.task.CleanTask;
 import co.gongzh.procbridge.IDelegate;
 import co.gongzh.procbridge.Server;
 import org.jetbrains.annotations.Nullable;
@@ -22,8 +24,11 @@ public class Main implements IDelegate {
     }
 
     private Server server;
+    private ResponsiveScheduler scheduler;
 
     public Main(int port){
+        this.scheduler = new ResponsiveScheduler();
+        scheduler.repeatTask(new CleanTask(), 0, 1000);
         System.out.println("");
         System.out.println("STREAMING SERVER IS STARTED!");
         this.server = new Server(port, this);

@@ -11,6 +11,7 @@ public class Stream {
     private UUID id = UUID.randomUUID();
     private FixedQueue<String> frames;
     private int fps;
+    private long lastUpdate;
 
     public Stream(JSONObject json){
         this.fps = json.getInt("fps");
@@ -20,9 +21,10 @@ public class Stream {
 
     public void addFrame(String frame){
         frames.add(frame);
+        lastUpdate = System.currentTimeMillis();
     }
 
     public String getLastFrame(){
-        return frames.getQueue().getFirst();
+        return frames.getQueue().getLast();
     }
 }

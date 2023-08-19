@@ -17,6 +17,8 @@ import org.json.JSONObject;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) throws AWTException {
@@ -51,6 +53,19 @@ public class Main {
     }
 
     public void watchStream(){
+        Form options = ui.createForm("Configuração do Player")
+                .addLabel("Para assistir as streams existem algumas opções.")
+                .addLabel("Você pode preferir assistir em forma de vídeo")
+                .addLabel("ou em forma de frame em tempo real, as duas opções")
+                .addLabel("tem vantagens e desvantagens, a em forma de vídeo")
+                .addLabel("pode adicionar uma carga extra ao computador, enquanto")
+                .addLabel("a de frame em tempo real pode ter engasgos ou travamentos.")
+                .addLabel("Há uma forma ainda em testes que utiliza a GPU e OpenGL")
+                .addLabel("para renderizar os quadros mas pode estar inacabado ou")
+                .addLabel("inativo.")
+                .addSelection("Modo de exibição", Arrays.asList("Frame em tempo real (OK)", "Player de Vídeo (OK)", "OpenGL (requer GPU)"))
+                .show();
+
         JSONObject payload = streamingManager.getStreams();
         JSONArray data = payload.getJSONArray("data");
         ArrayList<ListElement> element = new ArrayList<>();
@@ -63,7 +78,13 @@ public class Main {
             }
         });
         ListElement result = ui.showList("Escolha uma das streams para assistir", "Lista de Stream", element.toArray(new ListElement[element.size()]));
-
+        Map<String, Object> selected = (Map<String, Object>) data.toList().stream()
+                .filter(o -> {
+                    HashMap<String, Object> obj = ((HashMap<String, Object>) o);
+                    String streamName = (String) obj.get("name");
+                    return streamName.equalsIgnoreCase(result.getTitle());
+                }).findFirst().orElse(null);
+        watchManager.watch((String) selected.get("id"), (Integer) selected.get("fps"));
     }
     public void startRecord(){
         Form f = ui.createForm("Configure sua Stream")
@@ -73,7 +94,7 @@ public class Main {
                 .addSlider("Quant. de frames por segundo: (hz)", 15, 240, 60, 30, 30)
                 .addCheckbox("Forçar o client a ver mais frames").show();
         String q = f.getByIndex(2).asString();
-        recordManager.startStream(f.getByIndex(1).asString(), f.getByIndex(3).asInt(), VideoQuality.valueOf(q.contains("p") ? "V_"+q : q));
+        recordManager.startStream(f.getByIndex(1).asString(), f.getByIndex(3).asInt(), VideoQuality.valueOf(q.contains("p") ? "V_"+q : q.toUpperCase()), ui);
     }
 
     public void stopRecord(){

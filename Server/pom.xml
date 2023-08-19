@@ -38,5 +38,10 @@
             <artifactId>procbridge-java</artifactId>
             <version>46465ef68c</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.SrBalbucio</groupId>
+            <artifactId>ResponsiveScheduler</artifactId>
+            <version>v1.0.3</version>
+        </dependency>
     </dependencies>
 </project>

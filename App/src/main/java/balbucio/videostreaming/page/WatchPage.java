@@ -2,6 +2,7 @@ package balbucio.videostreaming.page;
 
 import balbucio.org.ejsl.component.JImage;
 import balbucio.org.ejsl.utils.ImageUtils;
+import balbucio.videostreaming.utils.FrameComponent;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,23 +15,21 @@ public class WatchPage extends JFrame {
 
     @Getter
     private BufferedImage frame;
-    private JImage image;
+    private FrameComponent image;
 
     public WatchPage(){
         super("Watch Stream");
         this.setLayout(new BorderLayout());
-        this.image = new JImage(ImageUtils.getImage(this.getClass().getResourceAsStream("/logo.png")));
-        image.setMaxSize(true);
-        image.setCenter(true);
+        this.image = new FrameComponent(ImageUtils.toBufferedImage(ImageUtils.getImage(this.getClass().getResourceAsStream("/logo.png"))));
         this.add(image, BorderLayout.CENTER);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setVisible(true);
     }
 
     public void setFrame(BufferedImage img){
-        image.setImage(ImageUtils.getImage(img));
+        image.setFrame(img);
+        this.revalidate();
+        this.repaint();
     }
 
-    public void setFrame(Image img){
-        image.setImage(img);
-    }
 }
